@@ -25,6 +25,11 @@ export default css`
   margin: 0 auto;
 }
 
+.ratings h2 {
+  font-size: var(--heading-font-size-l);
+  font-weight: var(--heading-font-weight);
+}
+
 .ratings .rating-stars {
   color: var(--color-info-accent);
   margin-top: 20px;
