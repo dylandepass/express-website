@@ -14,7 +14,7 @@
 
 import { html, LitElement, unsafeSVG, ref, createRef, range, map, when } from './lit.min.js';
 import { getIcon } from '../../scripts/scripts.js';
-import ratingsStyle from './lit-ratings.css.js';
+import ratingsStyle from './lit-rewrite.css.js';
 
 const ratings = [
   {
