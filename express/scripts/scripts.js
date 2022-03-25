@@ -103,7 +103,7 @@ export function getMeta(name) {
     const nameAttr = $m.getAttribute('name');
     const propertyAttr = $m.getAttribute('property');
     return ((nameAttr && nameLower === nameAttr.toLowerCase())
-    || (propertyAttr && nameLower === propertyAttr.toLowerCase()));
+      || (propertyAttr && nameLower === propertyAttr.toLowerCase()));
   });
   if ($metas[0]) value = $metas[0].getAttribute('content');
   return value;
@@ -175,6 +175,7 @@ export function getIcon(icons, alt, size = 44) {
     'users',
     'webmobile',
     'youtube',
+    'star',
   ];
   if (symbols.includes(icon)) {
     const iconName = icon;
@@ -880,12 +881,12 @@ export function decorateButtons(block = document) {
           $up.classList.add('button-container');
         }
         if ($up.childNodes.length === 1 && $up.tagName === 'STRONG'
-            && $twoup.childNodes.length === 1 && $twoup.tagName === 'P') {
+          && $twoup.childNodes.length === 1 && $twoup.tagName === 'P') {
           $a.className = 'button accent';
           $twoup.classList.add('button-container');
         }
         if ($up.childNodes.length === 1 && $up.tagName === 'EM'
-            && $twoup.childNodes.length === 1 && $twoup.tagName === 'P') {
+          && $twoup.childNodes.length === 1 && $twoup.tagName === 'P') {
           $a.className = 'button accent light';
           $twoup.classList.add('button-container');
         }
