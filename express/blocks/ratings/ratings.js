@@ -66,7 +66,6 @@ const RatingElement = (props) => {
   const [active, setActive] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [selectedRating, setSelectedRating] = useState(ratings.at(4));
-  const [star, _] = useState();
   const rangeRef = useRef(null);
   const toolTipRef = useRef(null);
   const sliderFillRef = useRef(null);
