@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Adobe. All rights reserved.
+ * Copyright 2021 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy
  * of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -10,181 +10,223 @@
  * governing permissions and limitations under the License.
  */
 
-/* eslint-disable no-mixed-operators, object-curly-newline */
+import {
+  createTag,
+  getIcon,
+  toClassName,
+  // eslint-disable-next-line import/no-unresolved
+} from '../../scripts/scripts.js';
 
-import { html, LitElement, unsafeSVG, ref, createRef, range, map, when } from './lit.min.js';
-import { getIcon } from '../../scripts/scripts.js';
-import ratingsStyle from './lit-rewrite.css.js';
-
-const ratings = [
-  {
-    class: 'one-star',
-    img: getIcon('emoji-angry-face'),
-    text: 'Disappointing',
-    textareaLabel: "We're sorry to hear that. What went wrong?",
-    textareaInside: 'Your feedback (Required)',
-    feedbackRequired: true,
-  },
-  {
-    class: 'two-stars',
-    img: getIcon('emoji-thinking-face'),
-    text: 'Insufficient',
-    textareaLabel: 'We value your feedback. How can we improve?',
-    textareaInside: 'Your feedback (Required)',
-    feedbackRequired: true,
-  },
-  {
-    class: 'three-stars',
-    img: getIcon('emoji-upside-down-face'),
-    text: 'Satisfied',
-    textareaLabel: 'Satisfied is good, but what would make us great?',
-    textareaInside: 'Your feedback (Optional)',
-    feedbackRequired: false,
-  },
-  {
-    class: 'four-stars',
-    img: getIcon('emoji-smiling-face'),
-    text: 'Helpful',
-    textareaLabel: 'Was there more we could do to be better?',
-    textareaInside: 'Your feedback (Optional)',
-    feedbackRequired: false,
-  },
-  {
-    class: 'five-stars',
-    img: getIcon('emoji-star-struck'),
-    text: 'Amazing',
-    textareaLabel: "That's great. Could you tell us what you loved?",
-    textareaInside: 'Your feedback (Optional)',
-    feedbackRequired: false,
-  },
-];
-
-export class RatingElement extends LitElement {
-  static styles = [ratingsStyle];
-
-  static properties = {
-    active: { type: Boolean },
-    submitted: { type: Boolean },
-    selectedRating: { type: Object },
-  };
-
-  constructor() {
-    super();
-    this.star = getIcon('star');
-    this.selectedRating = ratings.at(4);
-    this.rangeRef = createRef();
-    this.toolTipRef = createRef();
-    this.sliderFillRef = createRef();
-    this.comment = createRef();
-  }
-
-  _onRangeInput(e) {
-    const { value } = e.target;
-    this._calculateRating(value);
-    this._updateToolTip(value);
-  }
-
-  _onRangeChange(e) {
-    const roundedValue = this._calculateRating(e.target.value);
-    this._updateToolTip(roundedValue);
-  }
-
-  _onStarsClick(index) {
-    this._calculateRating(index);
-    this._updateToolTip(index);
-  }
-
-  _onRangeTouchStart() {
-    this.toolTipRef.value.style.transition = 'none';
-    this.sliderFillRef.value.style.transition = 'none';
-  }
-
-  _onRangeTouchEnd() {
-    this.toolTipRef.value.style.transition = 'left .3s, right .3s';
-    this.sliderFillRef.value.style.transition = 'width .3s';
-  }
-
-  _onSubmit(e) {
-    e.preventDefault();
-    this.submitted = true;
-  }
-
-  _calculateRating(value) {
-    const roundedValue = Math.round(value);
-    this.selectedRating = ratings.at(roundedValue - 1);
-    this.active = true;
-    return roundedValue;
-  }
-
-  _updateToolTip(value) {
-    const { value: rangeSlider } = this.rangeRef;
-    const { value: toolTip } = this.toolTipRef;
-    const { value: sliderFill } = this.sliderFillRef;
-    const thumbWidth = 60;
-    const pos = (value - rangeSlider.getAttribute('min')) / (rangeSlider.getAttribute('max') - rangeSlider.getAttribute('min'));
-    const thumbCorrect = (thumbWidth * (pos - 0.25) * -1) - 0.1;
-    const titlePos = (pos * rangeSlider.offsetWidth) - (thumbWidth / 4) + thumbCorrect;
-    toolTip.style.left = `${titlePos}px`;
-    sliderFill.style.width = `${titlePos + (thumbWidth / 2)}px`;
-  }
-
-  _renderStar(count) {
-    return map(range(count), () => unsafeSVG(this.star));
-  }
-
-  _renderCommentBlock() {
-    return html`
-      <div class= "slider-comment">
-        <label for="comment">${this.selectedRating.textareaLabel}</label>
-        <textarea id="comment" name="comment" rows="5" placeholder="${this.selectedRating.textareaInside}" ?required=${this.selectedRating.feedbackRequired} ${ref(this.comment)}></textarea>
-        <input type="submit" value="Submit rating" @click="${this._onSubmit}">
-      </div>
-    `;
-  }
-
-  _renderThankYouBlock() {
-    return html`
-      <h2>Thank you for your feedback</h2>
-      <p>
-        (Testing that the block is working correctly): <br />
-        Your rating: ${this.selectedRating.text} stars <br />
-        Your comment: "${this.comment.value.value}"
-      </p>
-    `;
-  }
-
-  render() {
-    return html`
-      <div class="ratings block ${this.active && this.selectedRating.class}">
-        <h2 id="rate-our-quick-action">Rate our Quick Action<span class="rating-stars">${this._renderStar(ratings.length)}</span></h2>
-        <form>
-          <div class="slider">
-            <div class="tooltip" ${ref(this.toolTipRef)}>
-              <span class="tooltip--text">${this.selectedRating.text}</span>
-              <div class="tooltip--image">${unsafeSVG(this.selectedRating.img)}</div>
-            </div>
-            <input type="range" min="1" max="${ratings.length}" step="0.001" value="4.5" aria-labelledby="rate-our-quick-action" ${ref(this.rangeRef)} @change=${this._onRangeChange} @input=${this._onRangeInput} @mousedown=${this._onRangeTouchStart} @touchstart=${this._onRangeTouchStart} @mouseup=${this._onRangeTouchEnd} @touchend=${this._onRangeTouchEnd}>
-            <div class="slider-fill" ${ref(this.sliderFillRef)}></div>
-          </div>
-          <div class="slider-bottom">
-            ${map(range(ratings.length), (index) => html`
-              <div class="vertical-line">
-                <button type="button" aria-label="${index + 1}" class="stars ${ratings[index].class}" @click=${() => this._onStarsClick(index + 1)}>
-                  ${this._renderStar(index + 1)}
-                </button>
-              </div>
-            `)}
-          </div>
-          ${when(this.submitted, this._renderThankYouBlock.bind(this), this._renderCommentBlock.bind(this))}
-        </form >
-      </div > `;
-  }
+// Updates the front-end style of the slider.
+function updateSliderStyle($block, value) {
+  const $input = $block.querySelector('input[type=range]');
+  const $tooltip = $block.querySelector('.tooltip');
+  const $sliderFill = $block.querySelector('.slider-fill');
+  const thumbWidth = 60;
+  const pos = (value - $input.getAttribute('min')) / ($input.getAttribute('max') - $input.getAttribute('min'));
+  const thumbCorrect = (thumbWidth * (pos - 0.25) * -1) - 0.1;
+  const titlePos = (pos * $input.offsetWidth) - (thumbWidth / 4) + thumbCorrect;
+  $tooltip.style.left = `${titlePos}px`;
+  $sliderFill.style.width = `${titlePos + (thumbWidth / 2)}px`;
 }
 
-customElements.define('rating-element', RatingElement);
+// Implements the slider logic.
+function sliderFunctionality($block) {
+  const $input = $block.querySelector('input[type=range]');
+  const $sliderFill = $block.querySelector('.slider-fill');
+  const $tooltip = $block.querySelector('.tooltip');
+  const $tooltipText = $block.querySelector('.tooltip--text');
+  const $tooltipImg = $block.querySelector('.tooltip--image');
+  const $textarea = $block.querySelector('.slider-comment textarea');
+  const $textareaLabel = $block.querySelector('.slider-comment label');
+  const $stars = Array.from($block.querySelectorAll('.stars'));
+
+  const ratings = [
+    {
+      class: 'one-star',
+      img: getIcon('emoji-angry-face'),
+      text: 'Disappointing', // to-do: placeholders
+      textareaLabel: "We're sorry to hear that. What went wrong?", // to-do: placeholders
+      textareaInside: 'Your feedback (Required)', // to-do: placeholders
+      feedbackRequired: true,
+    },
+    {
+      class: 'two-stars',
+      img: getIcon('emoji-thinking-face'),
+      text: 'Insufficient', // to-do: placeholders
+      textareaLabel: 'We value your feedback. How can we improve?', // to-do: placeholders
+      textareaInside: 'Your feedback (Required)', // to-do: placeholders
+      feedbackRequired: true,
+    },
+    {
+      class: 'three-stars',
+      img: getIcon('emoji-upside-down-face'),
+      text: 'Satisfied', // to-do: placeholders
+      textareaLabel: 'Satisfied is good, but what would make us great?', // to-do: placeholders
+      textareaInside: 'Your feedback (Optional)', // to-do: placeholders
+      feedbackRequired: false,
+    },
+    {
+      class: 'four-stars',
+      img: getIcon('emoji-smiling-face'),
+      text: 'Helpful', // to-do: placeholders
+      textareaLabel: 'Was there more we could do to be better?', // to-do: placeholders
+      textareaInside: 'Your feedback (Optional)', // to-do: placeholders
+      feedbackRequired: false,
+    },
+    {
+      class: 'five-stars',
+      img: getIcon('emoji-star-struck'),
+      text: 'Amazing', // to-do: placeholders
+      textareaLabel: "That's great. Could you tell us what you loved?", // to-do: placeholders
+      textareaInside: 'Your feedback (Optional)', // to-do: placeholders
+      feedbackRequired: false,
+    },
+  ];
+  // Updates the value of the slider and tooltip.
+  function updateSliderValue(snap = true) {
+    let val = parseFloat($input.value) ?? 0;
+    const index = Math.round(val);
+    if (snap) {
+      val = index;
+      $input.value = index;
+    }
+    $tooltipText.textContent = ratings[index - 1].text;
+    $tooltipImg.innerHTML = ratings[index - 1].img;
+    $textareaLabel.textContent = ratings[index - 1].textareaLabel;
+    $textarea.setAttribute('placeholder', ratings[index - 1].textareaInside);
+    if (ratings[index - 1].feedbackRequired) {
+      $textarea.setAttribute('required', 'true');
+    } else {
+      $textarea.removeAttribute('required');
+    }
+    ratings.forEach((obj) => $block.classList.remove(obj.class));
+    $block.classList.add(ratings[index - 1].class);
+    updateSliderStyle($block, $input.value);
+  }
+  // Slider event listeners.
+  $input.addEventListener('input', () => updateSliderValue(false));
+  $input.addEventListener('change', () => updateSliderValue());
+  $input.addEventListener('keyup', (e) => {
+    if (e.code === 'ArrowLeft' || e.code === 'ArrowDown') {
+      $input.value -= 1;
+      updateSliderValue();
+    } else if (e.code === 'ArrowRight' || e.code === 'ArrowUp') {
+      $input.value += 1;
+      updateSliderValue();
+    }
+  });
+  ['mousedown', 'touchstart'].forEach((event) => {
+    $input.addEventListener(event, () => {
+      $tooltip.style.transition = 'none';
+      $sliderFill.style.transition = 'none';
+    });
+  });
+  ['mouseup', 'touchend'].forEach((event) => {
+    $input.addEventListener(event, () => {
+      $tooltip.style.transition = 'left .3s, right .3s';
+      $sliderFill.style.transition = 'width .3s';
+    });
+  });
+  window.addEventListener('resize', () => {
+    updateSliderStyle($block, $input.value);
+  });
+  $stars.forEach(($star, index) => {
+    $star.addEventListener('click', () => {
+      $input.value = index + 1;
+      updateSliderValue();
+    });
+  });
+}
+
+// Generates rating slider HTML.
+function decorateRatingSlider($block, title) {
+  const $section = $block.closest('.section-wrapper');
+  const $form = createTag('form');
+  $block.appendChild($form);
+  const $slider = createTag('div', { class: 'slider' });
+  $form.appendChild($slider);
+  const $input = createTag('input', {
+    type: 'range', name: 'rating', id: 'rating', min: '1', max: '5', step: '0.001', value: '4.5', 'aria-labelledby': toClassName(title),
+  });
+  $slider.appendChild($input);
+  // Initial state of the slider:
+  $slider.insertAdjacentHTML('afterbegin', /* html */`
+    <div class="tooltip">
+      <div>
+        <span class="tooltip--text"></span>
+        <div class="tooltip--image">
+          ${getIcon('emoji-star-struck')}
+        <div>
+      </div>
+    </div>
+  `);
+  $slider.appendChild(createTag('div', { class: 'slider-fill' }));
+
+  const subtmitButtonText = 'Submit rating'; // to-do: placeholders
+  const star = getIcon('star');
+
+  $form.insertAdjacentHTML('beforeend', /* html */`
+    <div class="slider-bottom">
+      <div class="vertical-line"><button type="button" aria-label="1" class="stars one-star">${star}</button></div>
+      <div class="vertical-line"><button type="button" aria-label="2" class="stars two-stars">${star.repeat(2)}</button></div>
+      <div class="vertical-line"><button type="button" aria-label="3" class="stars three-stars">${star.repeat(3)}</button></div>
+      <div class="vertical-line"><button type="button" aria-label="4" class="stars four-stars">${star.repeat(4)}</button></div>
+      <div class="vertical-line"><button type="button" aria-label="5" class="stars five-stars">${star.repeat(5)}</button></div>
+    </div>
+    <div class="slider-comment">
+      <label for="comment"></label>
+      <textarea id="comment" name="comment" rows="5" placeholder=""></textarea>
+      <input type="submit" value="${subtmitButtonText}">
+    </div>
+  `);
+
+  // Form-submit event listener.
+  $form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const rating = $input.value;
+    const comment = $form.querySelector('#comment').value;
+
+    // to-do: submit rating.
+
+    $block.innerHTML = /* html */`
+    <h2>Thank you for your feedback</h2>
+    <p>
+      (Testing that the block is working correctly):
+      <br />
+      Your rating: ${rating} stars <!-- for testing purposes -->
+      <br />
+      Your comment: "${comment}" <!-- for testing purposes -->
+    </p>`;
+
+    if (window.scrollY > $section.offsetTop) window.scrollTo(0, $section.offsetTop - 64);
+  });
+  sliderFunctionality($block, $form);
+}
 
 export default function decorate($block) {
-  const ratingElement = document.createElement('rating-element');
+  const $CTA = $block.querySelector('a');
+  $CTA.classList.add('xlarge');
   $block.innerHTML = '';
-  $block.appendChild(ratingElement);
+  const title = 'Rate our Quick Action'; // to-do: placeholders
+  const $h2 = createTag('h2', { id: toClassName(title) });
+  $h2.textContent = title;
+  const star = getIcon('star');
+  const $stars = createTag('span', { class: 'rating-stars' });
+  $stars.innerHTML = `${star.repeat(5)}`;
+  $h2.appendChild($stars);
+  $block.appendChild($h2);
+
+  const actionUsed = true; // to-do: logic to see if the action was used.
+
+  if (actionUsed) {
+    decorateRatingSlider($block, title);
+  } else {
+    const $div = createTag('div', { class: 'cannot-rate' });
+    const $p = createTag('p');
+    $p.textContent = 'You need to use the Quick Action before you can rate it.'; // to-do: placeholders
+    $div.appendChild($p);
+    $div.appendChild($CTA);
+    $block.appendChild($div);
+  }
 }
