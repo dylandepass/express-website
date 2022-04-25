@@ -12,12 +12,8 @@
 
 /* eslint-disable no-mixed-operators, object-curly-newline */
 
-import htm from 'https://cdn.skypack.dev/htm';
-import { render, h } from 'https://cdn.skypack.dev/preact@10.4.7';
-import { useState, useRef } from 'https://cdn.skypack.dev/preact@10.4.7/hooks';
+import { render, html, useState, useRef } from './preact.js';
 import { getIcon } from '../../scripts/scripts.js';
-
-const html = htm.bind(h);
 
 const ratings = [
   {
