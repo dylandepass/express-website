@@ -10,7 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
-import { createTag, readBlockConfig } from '../../scripts/scripts.js';
+import { createTag } from '../../scripts/scripts.js';
+import { readBlockConfig } from '../../scripts/helix-web-library.esm.js';
 
 const CARD_WIDTH = 157;
 const CARD_HEIGHT = 313;
@@ -127,9 +128,9 @@ function isMobileUserAgent() {
 
 function isMobileLike() {
   return (document.body.dataset.device === 'mobile'
-  || window.screen.width < 1200
-  || window.innerWidth < 1200
-  || isMobileUserAgent());
+    || window.screen.width < 1200
+    || window.innerWidth < 1200
+    || isMobileUserAgent());
 }
 
 /**

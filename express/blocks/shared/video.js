@@ -11,9 +11,13 @@
  */
 
 import {
-  createTag, getLocale, loadBlock, toClassName,
-// eslint-disable-next-line import/no-unresolved
+  createTag, getLocale,
+  // eslint-disable-next-line import/no-unresolved
 } from '../../scripts/scripts.js';
+import {
+  loadBlock,
+  toClassName,
+} from '../../scripts/helix-web-library.esm.js';
 
 const docTitle = document.title;
 

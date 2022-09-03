@@ -15,16 +15,17 @@ import {
   addAnimationToggle,
   addSearchQueryToHref,
   createTag,
-  decorateMain,
+  app,
   fetchPlaceholders,
   getIconElement,
   getLocale,
   linkImage,
-  toClassName,
 } from '../../scripts/scripts.js';
 import { Masonry } from '../shared/masonry.js';
 
 import { buildCarousel } from '../shared/carousel.js';
+
+import { toClassName } from '../../scripts/helix-web-library.esm.js';
 
 const cache = {
   templates: [],
@@ -157,7 +158,8 @@ async function fetchBlueprint(pathname) {
   const body = await resp.text();
   const $main = createTag('main');
   $main.innerHTML = body;
-  decorateMain($main);
+  console.log('remplate list');
+  app.decorateMain($main);
 
   window.spark.$blueprint = $main;
   return ($main);

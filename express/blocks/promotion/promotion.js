@@ -13,14 +13,16 @@
 import {
   createTag,
   getLocale,
-  normalizeHeadings,
-  decorateButtons,
   fixIcons,
+  trackBranchParameters,
+  decorateButtons,
+  // eslint-disable-next-line import/no-unresolved
+} from '../../scripts/scripts.js';
+import {
   toClassName,
   createOptimizedPicture,
-  trackBranchParameters,
-// eslint-disable-next-line import/no-unresolved
-} from '../../scripts/scripts.js';
+  normalizeHeadings,
+} from '../../scripts/helix-web-library.esm.js';
 
 const PROMOTION_FOLDER = 'express/promotions';
 

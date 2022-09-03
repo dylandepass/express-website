@@ -13,10 +13,11 @@
 
 import {
   createTag,
-  decorateMain,
-  loadBlocks,
-// eslint-disable-next-line import/no-unresolved
+  app,
+  // eslint-disable-next-line import/no-unresolved
 } from '../../scripts/scripts.js';
+
+import { loadBlocks } from '../../scripts/helix-web-library.esm.js';
 
 async function decorateFragment($block) {
   const ref = $block.textContent;
@@ -27,7 +28,8 @@ async function decorateFragment($block) {
   $main.innerHTML = html;
   const img = $main.querySelector('img');
   img.setAttribute('loading', 'lazy');
-  decorateMain($main);
+  console.log('fragment');
+  app.decorateMain($main);
   const loadedBlocks = await loadBlocks($main);
   await Promise.all(loadedBlocks);
   const $section = $block.closest('.section');

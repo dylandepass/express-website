@@ -13,14 +13,15 @@
 /* global digitalData _satellite __satelliteLoadedCallback alloy */
 
 import {
-  loadScript,
   getLocale,
   getLanguage,
   getMetadata,
   checkTesting,
   trackBranchParameters,
-// eslint-disable-next-line import/no-unresolved
+  // eslint-disable-next-line import/no-unresolved
 } from './scripts.js';
+
+import { loadScript } from './helix-web-library.esm.js';
 
 // eslint-disable-next-line import/no-unresolved
 import Context from './context.js';
@@ -154,7 +155,7 @@ loadScript(martechURL, () => {
 
   let category = getMetadata('category');
   if (!category && (pathname.includes('/create/')
-      || pathname.includes('/feature/'))) {
+    || pathname.includes('/feature/'))) {
     category = 'design';
     if (pathname.includes('/image')) category = 'photo';
     if (pathname.includes('/video')) category = 'video';
@@ -164,19 +165,19 @@ loadScript(martechURL, () => {
   // home
   if (
     pathname === '/express'
-      || pathname === '/express/'
+    || pathname === '/express/'
   ) {
     sparkLandingPageType = 'home';
     // seo
   } else if (
     pathname === '/express/create'
-      || pathname.includes('/create/')
-      || pathname === '/express/make'
-      || pathname.includes('/make/')
-      || pathname === '/express/feature'
-      || pathname.includes('/feature/')
-      || pathname === '/express/discover'
-      || pathname.includes('/discover/')
+    || pathname.includes('/create/')
+    || pathname === '/express/make'
+    || pathname.includes('/make/')
+    || pathname === '/express/feature'
+    || pathname.includes('/feature/')
+    || pathname === '/express/discover'
+    || pathname.includes('/discover/')
   ) {
     sparkLandingPageType = 'seo';
     // learn
@@ -187,10 +188,10 @@ loadScript(martechURL, () => {
     sparkLandingPageType = 'quickAction';
   } else if (
     pathname === '/express/learn'
-      || (
-        pathname.includes('/learn/')
-        && !pathname.includes('/blog/')
-      )
+    || (
+      pathname.includes('/learn/')
+      && !pathname.includes('/blog/')
+    )
   ) {
     if (pathname.includes('/express-your-brand')) {
       sparkLandingPageType = 'express-your-brand';
@@ -200,7 +201,7 @@ loadScript(martechURL, () => {
     // blog
   } else if (
     pathname === '/express/learn/blog'
-      || pathname.includes('/learn/blog/')
+    || pathname.includes('/learn/blog/')
   ) {
     sparkLandingPageType = 'blog';
     // pricing
@@ -431,7 +432,7 @@ loadScript(martechURL, () => {
   // Fire the displayPurchasePanel event if it is the pricing site
   if (
     sparkLandingPageType === 'pricing'
-      && sparkTouchpoint
+    && sparkTouchpoint
   ) {
     if (useAlloy) {
       _satellite.track('event', {
@@ -607,11 +608,11 @@ loadScript(martechURL, () => {
         adobeEventName = 'adobe.com:express:CTA:pricing:viewPlans:Click';
         sparkEventName = 'landing:ctaPressed';
       }
-    // quick actions clicks
+      // quick actions clicks
     } else if ($a.href.match(/spark\.adobe\.com\/[a-zA-Z-]*\/?tools/g) || $a.href.match(/express\.adobe\.com\/[a-zA-Z-]*\/?tools/g)) {
       adobeEventName = appendLinkText(adobeEventName, $a);
       sparkEventName = 'quickAction:ctaPressed';
-    // Default clicks
+      // Default clicks
     } else {
       adobeEventName = appendLinkText(adobeEventName, $a);
       sparkEventName = 'landing:ctaPressed';

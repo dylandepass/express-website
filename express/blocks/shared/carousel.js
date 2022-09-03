@@ -12,9 +12,9 @@
 
 import {
   createTag,
-  loadCSS,
-// eslint-disable-next-line import/no-unresolved
+  // eslint-disable-next-line import/no-unresolved
 } from '../../scripts/scripts.js';
+import { loadCSS } from '../../scripts/helix-web-library.esm.js';
 
 // Wait for all media to load
 function waitForMediaToLoad($parent) {

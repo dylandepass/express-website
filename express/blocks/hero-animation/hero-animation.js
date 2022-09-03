@@ -14,11 +14,12 @@ import {
   addAnimationToggle,
   addFreePlanWidget,
   createTag,
-  toClassName,
   getLocale,
   addHeaderSizing,
-// eslint-disable-next-line import/no-unresolved
+  // eslint-disable-next-line import/no-unresolved
 } from '../../scripts/scripts.js';
+
+import { toClassName } from '../../scripts/helix-web-library.esm.js';
 
 import {
   isVideoLink,

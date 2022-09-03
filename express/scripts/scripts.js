@@ -11,7 +11,16 @@
  */
 /* eslint-disable no-console */
 
-window.RUM_GENERATION = 'ccx-gen-3';
+import {
+  HelixApp,
+  buildBlock,
+  stamp,
+  readBlockConfig,
+  addFavIcon,
+  createOptimizedPicture,
+  loadScript,
+  toCamelCase,
+} from './helix-web-library.esm.js';
 
 /**
  * log RUM if part of the sample.
@@ -380,77 +389,6 @@ export function linkImage($elem) {
   }
 }
 
-export function readBlockConfig($block) {
-  const config = {};
-  $block.querySelectorAll(':scope>div').forEach(($row) => {
-    if ($row.children) {
-      const $cols = [...$row.children];
-      if ($cols[1]) {
-        const $value = $cols[1];
-        const name = toClassName($cols[0].textContent);
-        let value = '';
-        if ($value.querySelector('a')) {
-          const $as = [...$value.querySelectorAll('a')];
-          if ($as.length === 1) {
-            value = $as[0].href;
-          } else {
-            value = $as.map(($a) => $a.href);
-          }
-        } else if ($value.querySelector('p')) {
-          const $ps = [...$value.querySelectorAll('p')];
-          if ($ps.length === 1) {
-            value = $ps[0].textContent;
-          } else {
-            value = $ps.map(($p) => $p.textContent);
-          }
-        } else value = $row.children[1].textContent;
-        config[name] = value;
-      }
-    }
-  });
-  return config;
-}
-
-/**
- * Decorates all sections in a container element.
- * @param {Element} $main The container element
- */
-export function decorateSections($main) {
-  $main.querySelectorAll(':scope > div').forEach((section) => {
-    const wrappers = [];
-    let defaultContent = false;
-    [...section.children].forEach((e) => {
-      if (e.tagName === 'DIV' || !defaultContent) {
-        const wrapper = document.createElement('div');
-        wrappers.push(wrapper);
-        defaultContent = e.tagName !== 'DIV';
-        if (defaultContent) wrapper.classList.add('default-content-wrapper');
-      }
-      wrappers[wrappers.length - 1].append(e);
-    });
-    wrappers.forEach((wrapper) => section.append(wrapper));
-    section.classList.add('section', 'section-wrapper'); // keep .section-wrapper for compatibility
-    section.setAttribute('data-section-status', 'initialized');
-
-    /* process section metadata */
-    const sectionMeta = section.querySelector('div.section-metadata');
-    if (sectionMeta) {
-      const meta = readBlockConfig(sectionMeta);
-      const keys = Object.keys(meta);
-      keys.forEach((key) => {
-        if (key === 'style') {
-          section.classList.add(...meta.style.split(', ').map(toClassName));
-        } else if (key === 'anchor') {
-          section.id = toClassName(meta.anchor);
-        } else {
-          section.dataset[key] = meta[key];
-        }
-      });
-      sectionMeta.remove();
-    }
-  });
-}
-
 /**
  * Updates all section status in a container element.
  * @param {Element} main The container element
@@ -707,13 +645,6 @@ export function addBlockClasses($block, classNames) {
   });
 }
 
-// function addDivClasses($element, selector, classes) {
-//   const $children = $element.querySelectorAll(selector);
-//   $children.forEach(($div, i) => {
-//     $div.classList.add(classes[i]);
-//   });
-// }
-
 function decorateHeaderAndFooter() {
   const $header = document.querySelector('header');
 
@@ -812,46 +743,6 @@ const blocksWithOptions = [
   'download-cards',
 ];
 
-/**
- * Decorates a block.
- * @param {Element} block The block element
- */
-export function decorateBlock(block) {
-  const blockName = block.classList[0];
-  if (blockName) {
-    let shortBlockName = blockName;
-    block.classList.add('block');
-    // begin CCX custom block option class handling
-    if (shortBlockName !== 'how-to-steps-carousel') {
-      blocksWithOptions.forEach((b) => {
-        if (shortBlockName.startsWith(`${b}-`)) {
-          const options = shortBlockName.substring(b.length + 1).split('-').filter((opt) => !!opt);
-          shortBlockName = b;
-          block.classList.add(b);
-          block.classList.add(...options);
-        }
-      });
-    }
-    // end CCX custom block option class handling
-    block.setAttribute('data-block-name', shortBlockName);
-    block.setAttribute('data-block-status', 'initialized');
-    const blockWrapper = block.parentElement;
-    blockWrapper.classList.add(`${shortBlockName}-wrapper`);
-    const section = block.closest('.section');
-    if (section) section.classList.add(`${blockName}-container`.replace(/--/g, '-'));
-  }
-}
-
-/**
- * Decorates all blocks in a container element.
- * @param {Element} main The container element
- */
-export function decorateBlocks(main) {
-  main
-    .querySelectorAll('div.section > div > div')
-    .forEach((block) => decorateBlock(block));
-}
-
 function decorateMarqueeColumns($main) {
   // flag first columns block in first section block as marquee
   const $sectionSplitByHighlight = $main.querySelector('.split-by-app-store-highlight');
@@ -881,37 +772,6 @@ export function scrollToHash() {
       }, 500);
     }
   }
-}
-
-/**
- * Builds a block DOM Element from a two dimensional array
- * @param {string} blockName name of the block
- * @param {any} content two dimensional array or string or object of content
- */
-export function buildBlock(blockName, content) {
-  const table = Array.isArray(content) ? content : [[content]];
-  const blockEl = document.createElement('div');
-  // build image block nested div structure
-  blockEl.classList.add(blockName);
-  table.forEach((row) => {
-    const rowEl = document.createElement('div');
-    row.forEach((col) => {
-      const colEl = document.createElement('div');
-      const vals = col.elems ? col.elems : [col];
-      vals.forEach((val) => {
-        if (val) {
-          if (typeof val === 'string') {
-            colEl.innerHTML += val;
-          } else {
-            colEl.appendChild(val);
-          }
-        }
-      });
-      rowEl.appendChild(colEl);
-    });
-    blockEl.appendChild(rowEl);
-  });
-  return (blockEl);
 }
 
 /**
@@ -964,32 +824,6 @@ export async function loadBlock(block, eager = false) {
     }
     block.setAttribute('data-block-status', 'loaded');
   }
-}
-
-/**
- * Loads JS and CSS for all blocks in a container element.
- * @param {Element} main The container element
- */
-export async function loadBlocks(main) {
-  updateSectionsStatus(main);
-  const blocks = [...main.querySelectorAll('div.block')];
-  for (let i = 0; i < blocks.length; i += 1) {
-    // eslint-disable-next-line no-await-in-loop
-    await loadBlock(blocks[i]);
-    updateSectionsStatus(main);
-  }
-  return blocks;
-}
-
-export function loadScript(url, callback, type) {
-  const $head = document.querySelector('head');
-  const $script = createTag('script', { src: url });
-  if (type) {
-    $script.setAttribute('type', type);
-  }
-  $head.append($script);
-  $script.onload = callback;
-  return $script;
 }
 
 export function getMetadata(name) {
@@ -1207,15 +1041,6 @@ export function decorateButtons(block = document) {
 
 export function checkTesting() {
   return (getMeta('testing').toLowerCase() === 'on');
-}
-
-/**
- * Sanitizes a string and turns it into camel case.
- * @param {*} name The unsanitized string
- * @returns {string} The camel cased string
- */
-export function toCamelCase(name) {
-  return toClassName(name).replace(/-([a-z])/g, (g) => g[1].toUpperCase());
 }
 
 /**
@@ -1552,49 +1377,6 @@ export function unwrapBlock($block) {
   }
 }
 
-export function normalizeHeadings(block, allowedHeadings) {
-  const allowed = allowedHeadings.map((h) => h.toLowerCase());
-  block.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((tag) => {
-    const h = tag.tagName.toLowerCase();
-    if (allowed.indexOf(h) === -1) {
-      // current heading is not in the allowed list -> try first to "promote" the heading
-      let level = parseInt(h.charAt(1), 10) - 1;
-      while (allowed.indexOf(`h${level}`) === -1 && level > 0) {
-        level -= 1;
-      }
-      if (level === 0) {
-        // did not find a match -> try to "downgrade" the heading
-        while (allowed.indexOf(`h${level}`) === -1 && level < 7) {
-          level += 1;
-        }
-      }
-      if (level !== 7) {
-        tag.outerHTML = `<h${level}>${tag.textContent}</h${level}>`;
-      }
-    }
-  });
-}
-
-function buildAutoBlocks($main) {
-  // Load the branch.io banner autoblock...
-  if (['yes', 'true', 'on'].includes(getMetadata('show-banner').toLowerCase())) {
-    const branchio = buildBlock('branch-io', '');
-    $main.querySelector(':scope > div:last-of-type').append(branchio);
-  }
-
-  // Load the app store autoblocks...
-  if (['yes', 'true', 'on'].includes(getMetadata('show-standard-app-store-blocks').toLowerCase())) {
-    if ($main.querySelector('.app-store-highlight') === null) {
-      const $highlight = buildBlock('app-store-highlight', '');
-      $main.querySelector(':scope > div:last-of-type').append($highlight);
-    }
-    if ($main.querySelector('.app-store-blade') === null) {
-      const $blade = buildBlock('app-store-blade', '');
-      $main.querySelector(':scope > div:last-of-type').append($blade);
-    }
-  }
-}
-
 function splitSections($main) {
   $main.querySelectorAll(':scope > div > div').forEach(($block) => {
     const hasAppStoreBlocks = ['yes', 'true', 'on'].includes(getMetadata('show-standard-app-store-blocks').toLowerCase());
@@ -1638,23 +1420,6 @@ function decorateLinkedPictures($main) {
       linkPicture($picture);
     }
   });
-}
-
-/**
- * Adds the favicon.
- * @param {string} href The favicon URL
- */
-export function addFavIcon(href) {
-  const link = document.createElement('link');
-  link.rel = 'icon';
-  link.type = 'image/svg+xml';
-  link.href = href;
-  const existingLink = document.querySelector('head link[rel="icon"]');
-  if (existingLink) {
-    existingLink.replaceWith(link);
-  } else {
-    document.getElementsByTagName('head')[0].appendChild(link);
-  }
 }
 
 function decorateSocialIcons($main) {
@@ -1820,48 +1585,6 @@ function displayEnv() {
 }
 
 /**
- * Returns a picture element with webp and fallbacks
- * @param {string} src The image URL
- * @param {string} alt The alt text of the image
- * @param {boolean} eager load image eager
- * @param {Array} breakpoints breakpoints and corresponding params (eg. width)
- */
-
-export function createOptimizedPicture(src, alt = '', eager = false, breakpoints = [{ media: '(min-width: 400px)', width: '2000' }, { width: '750' }]) {
-  const url = new URL(src, window.location.href);
-  const picture = document.createElement('picture');
-  const { pathname } = url;
-  const ext = pathname.substring(pathname.lastIndexOf('.') + 1);
-
-  // webp
-  breakpoints.forEach((br) => {
-    const source = document.createElement('source');
-    if (br.media) source.setAttribute('media', br.media);
-    source.setAttribute('type', 'image/webp');
-    source.setAttribute('srcset', `${pathname}?width=${br.width}&format=webply&optimize=medium`);
-    picture.appendChild(source);
-  });
-
-  // fallback
-  breakpoints.forEach((br, i) => {
-    if (i < breakpoints.length - 1) {
-      const source = document.createElement('source');
-      if (br.media) source.setAttribute('media', br.media);
-      source.setAttribute('srcset', `${pathname}?width=${br.width}&format=${ext}&optimize=medium`);
-      picture.appendChild(source);
-    } else {
-      const img = document.createElement('img');
-      img.setAttribute('loading', eager ? 'eager' : 'lazy');
-      img.setAttribute('alt', alt);
-      picture.appendChild(img);
-      img.setAttribute('src', `${pathname}?width=${br.width}&format=${ext}&optimize=medium`);
-    }
-  });
-
-  return picture;
-}
-
-/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -1871,20 +1594,6 @@ function decoratePictures(main) {
     const picture = img.closest('picture');
     if (picture) picture.parentElement.replaceChild(newPicture, picture);
   });
-}
-
-export async function decorateMain($main) {
-  buildAutoBlocks($main);
-  splitSections($main);
-  decorateSections($main);
-  decorateButtons($main);
-  decorateBlocks($main);
-  decorateMarqueeColumns($main);
-  await fixIcons($main);
-  decoratePictures($main);
-  decorateLinkedPictures($main);
-  decorateSocialIcons($main);
-  makeRelativeLinks($main);
 }
 
 const usp = new URLSearchParams(window.location.search);
@@ -2057,58 +1766,6 @@ function decorateLegalCopy(main) {
   });
 }
 
-/**
- * loads everything needed to get to LCP.
- */
-async function loadEager() {
-  setTheme();
-  if (!window.hlx.lighthouse) await decorateTesting();
-
-  const main = document.querySelector('main');
-  if (main) {
-    await decorateMain(main);
-    decorateHeaderAndFooter();
-    decoratePageStyle();
-    decorateLegalCopy(main);
-    addJapaneseSectionHeaderSizing();
-    displayEnv();
-    displayOldLinkWarning();
-    wordBreakJapanese();
-
-    const lcpBlocks = ['columns', 'hero-animation', 'hero-3d'];
-    const block = document.querySelector('.block');
-    const hasLCPBlock = (block && lcpBlocks.includes(block.getAttribute('data-block-name')));
-    if (hasLCPBlock) await loadBlock(block, true);
-
-    document.querySelector('body').classList.add('appear');
-
-    if (!window.hlx.lighthouse) {
-      const target = checkTesting();
-      if (useAlloy) {
-        document.querySelector('body').classList.add('personalization-container');
-        // target = true;
-      }
-      if (target) {
-        hideBody();
-        setTimeout(() => {
-          unhideBody();
-        }, 3000);
-      }
-    }
-
-    const lcpCandidate = document.querySelector('main img');
-    await new Promise((resolve) => {
-      if (lcpCandidate && !lcpCandidate.complete) {
-        lcpCandidate.setAttribute('loading', 'eager');
-        lcpCandidate.addEventListener('load', () => resolve());
-        lcpCandidate.addEventListener('error', () => resolve());
-      } else {
-        resolve();
-      }
-    });
-  }
-}
-
 function removeMetadata() {
   document.head.querySelectorAll('meta').forEach((meta) => {
     if (meta.content && meta.content.includes('--none--')) {
@@ -2131,102 +1788,7 @@ export async function addFreePlanWidget(elem) {
   }
 }
 
-/**
- * loads everything that doesn't need to be delayed.
- */
-async function loadLazy() {
-  const main = document.querySelector('main');
-
-  // post LCP actions go here
-  sampleRUM('lcp');
-
-  loadBlocks(main);
-  loadCSS('/express/styles/lazy-styles.css');
-  scrollToHash();
-  resolveFragments();
-  addPromotion();
-  removeMetadata();
-  addFavIcon('/express/icons/cc-express.svg');
-  if (!window.hlx.lighthouse) loadMartech();
-
-  sampleRUM.observe(document.querySelectorAll('main picture > img'));
-  sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
-}
-
-/**
- * Decorates the page.
- */
-async function decoratePage() {
-  window.hlx = window.hlx || {};
-  window.hlx.lighthouse = new URLSearchParams(window.location.search).get('lighthouse') === 'on';
-  window.hlx.init = true;
-
-  await loadEager();
-  loadLazy();
-  loadGnav();
-  if (window.location.hostname.endsWith('hlx.page') || window.location.hostname === ('localhost')) {
-    import('../../tools/preview/preview.js');
-  }
-}
-
-if (!window.hlx.init && !window.isTestEnv) {
-  decoratePage();
-}
-
-/*
- * lighthouse performance instrumentation helper
- * (needs a refactor)
- */
-
-function stamp(message) {
-  if (window.name.includes('performance')) {
-    // eslint-disable-next-line no-console
-    console.log(`${new Date() - performance.timing.navigationStart}:${message}`);
-  }
-}
-
 stamp('start');
-
-function registerPerformanceLogger() {
-  try {
-    const polcp = new PerformanceObserver((entryList) => {
-      const entries = entryList.getEntries();
-      stamp(JSON.stringify(entries));
-      // eslint-disable-next-line no-console
-      console.log(entries[0].element);
-    });
-    polcp.observe({ type: 'largest-contentful-paint', buffered: true });
-
-    const pols = new PerformanceObserver((entryList) => {
-      const entries = entryList.getEntries();
-      stamp(JSON.stringify(entries));
-      // eslint-disable-next-line no-console
-      console.log(entries[0].sources[0].node);
-    });
-    pols.observe({ type: 'layout-shift', buffered: true });
-
-    const polt = new PerformanceObserver((list) => {
-      for (const entry of list.getEntries()) {
-        // Log the entry and all associated details.
-        stamp(JSON.stringify(entry));
-      }
-    });
-
-    // Start listening for `longtask` entries to be dispatched.
-    polt.observe({ type: 'longtask', buffered: true });
-
-    const pores = new PerformanceObserver((entryList) => {
-      const entries = entryList.getEntries();
-      entries.forEach((entry) => {
-        stamp(`resource loaded: ${entry.name} - [${Math.round(entry.startTime + entry.duration)}]`);
-      });
-    });
-
-    pores.observe({ type: 'resource', buffered: true });
-  } catch (e) {
-    // no output
-  }
-}
 
 export function trackBranchParameters($links) {
   const rootUrl = new URL(window.location.href);
@@ -2287,4 +1849,179 @@ export function trackBranchParameters($links) {
   }
 }
 
-if (window.name.includes('performance')) registerPerformanceLogger();
+const app = HelixApp.init({
+  rumEnabled: true,
+  autoAppear: false,
+  loadHeader: false,
+  loadFooter: false,
+  rumGeneration: 'ccx-gen-3',
+  lcpBlocks: ['columns', 'hero-animation', 'hero-3d'],
+});
+
+app.withDecorateSections(($main) => {
+  $main.querySelectorAll(':scope > div').forEach((section) => {
+    const wrappers = [];
+    let defaultContent = false;
+    [...section.children].forEach((e) => {
+      if (e.tagName === 'DIV' || !defaultContent) {
+        const wrapper = document.createElement('div');
+        wrappers.push(wrapper);
+        defaultContent = e.tagName !== 'DIV';
+        if (defaultContent) wrapper.classList.add('default-content-wrapper');
+      }
+      wrappers[wrappers.length - 1].append(e);
+    });
+    wrappers.forEach((wrapper) => section.append(wrapper));
+    section.classList.add('section', 'section-wrapper'); // keep .section-wrapper for compatibility
+    section.setAttribute('data-section-status', 'initialized');
+
+    /* process section metadata */
+    const sectionMeta = section.querySelector('div.section-metadata');
+    if (sectionMeta) {
+      const meta = readBlockConfig(sectionMeta);
+      const keys = Object.keys(meta);
+      keys.forEach((key) => {
+        if (key === 'style') {
+          section.classList.add(...meta.style.split(', ').map(toClassName));
+        } else if (key === 'anchor') {
+          section.id = toClassName(meta.anchor);
+        } else {
+          section.dataset[key] = meta[key];
+        }
+      });
+      sectionMeta.remove();
+    }
+  });
+})
+  .withDecorateButtons((block = document) => {
+    decorateButtons(block);
+  })
+  .withLoadEager(async () => {
+    loadGnav();
+    if (window.location.hostname.endsWith('hlx.page') || window.location.hostname === ('localhost')) {
+      import('../../tools/preview/preview.js');
+    }
+
+    setTheme();
+    if (!window.hlx.lighthouse) await decorateTesting();
+
+    const main = document.querySelector('main');
+    if (main) {
+      decorateHeaderAndFooter();
+      decoratePageStyle();
+      decorateLegalCopy(main);
+      addJapaneseSectionHeaderSizing();
+      displayEnv();
+      displayOldLinkWarning();
+      wordBreakJapanese();
+
+      const lcpBlocks = ['columns', 'hero-animation', 'hero-3d'];
+      const block = document.querySelector('.block');
+      const hasLCPBlock = (block && lcpBlocks.includes(block.getAttribute('data-block-name')));
+      if (hasLCPBlock) await loadBlock(block, true);
+
+      document.querySelector('body').classList.add('appear');
+
+      if (!window.hlx.lighthouse) {
+        const target = checkTesting();
+        if (useAlloy) {
+          document.querySelector('body').classList.add('personalization-container');
+          // target = true;
+        }
+        if (target) {
+          hideBody();
+          setTimeout(() => {
+            unhideBody();
+          }, 3000);
+        }
+      }
+
+      const lcpCandidate = document.querySelector('main img');
+      await new Promise((resolve) => {
+        if (lcpCandidate && !lcpCandidate.complete) {
+          lcpCandidate.setAttribute('loading', 'eager');
+          lcpCandidate.addEventListener('load', () => resolve());
+          lcpCandidate.addEventListener('error', () => resolve());
+        } else {
+          resolve();
+        }
+      });
+    }
+  })
+  .withBuildAutoBlocks(($main) => {
+    // Load the branch.io banner autoblock...
+    if (['yes', 'true', 'on'].includes(getMetadata('show-banner').toLowerCase())) {
+      const branchio = buildBlock('branch-io', '');
+      $main.querySelector(':scope > div:last-of-type').append(branchio);
+    }
+
+    // Load the app store autoblocks...
+    if (['yes', 'true', 'on'].includes(getMetadata('show-standard-app-store-blocks').toLowerCase())) {
+      if ($main.querySelector('.app-store-highlight') === null) {
+        const $highlight = buildBlock('app-store-highlight', '');
+        $main.querySelector(':scope > div:last-of-type').append($highlight);
+      }
+      if ($main.querySelector('.app-store-blade') === null) {
+        const $blade = buildBlock('app-store-blade', '');
+        $main.querySelector(':scope > div:last-of-type').append($blade);
+      }
+    }
+  })
+  .withLoadLazy(() => {
+    const main = document.querySelector('main');
+
+    // post LCP actions go here
+    sampleRUM('lcp');
+
+    // TODO: Make this configurable in helix-web-library
+    loadCSS('/express/styles/lazy-styles.css');
+    scrollToHash();
+    resolveFragments();
+    addPromotion();
+    removeMetadata();
+
+    // TODO: Make this configurable in helix-web-library
+    addFavIcon('/express/icons/cc-express.svg');
+    if (!window.hlx.lighthouse) loadMartech();
+
+    sampleRUM.observe(document.querySelectorAll('main picture > img'));
+    sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
+  })
+  .withDecorateBlock((block) => {
+    const blockName = block.classList[0];
+    if (blockName) {
+      let shortBlockName = blockName;
+      block.classList.add('block');
+      // begin CCX custom block option class handling
+      if (shortBlockName !== 'how-to-steps-carousel') {
+        blocksWithOptions.forEach((b) => {
+          if (shortBlockName.startsWith(`${b}-`)) {
+            const options = shortBlockName.substring(b.length + 1).split('-').filter((opt) => !!opt);
+            shortBlockName = b;
+            block.classList.add(b);
+            block.classList.add(...options);
+          }
+        });
+      }
+      // end CCX custom block option class handling
+      block.setAttribute('data-block-name', shortBlockName);
+      block.setAttribute('data-block-status', 'initialized');
+      const blockWrapper = block.parentElement;
+      blockWrapper.classList.add(`${shortBlockName}-wrapper`);
+      const section = block.closest('.section');
+      if (section) section.classList.add(`${blockName}-container`.replace(/--/g, '-'));
+    }
+  })
+  .withDecorateMain(async ($main) => {
+    console.log('decorating main');
+    splitSections($main);
+    decorateMarqueeColumns($main);
+    await fixIcons($main);
+    decoratePictures($main);
+    decorateLinkedPictures($main);
+    decorateSocialIcons($main);
+    makeRelativeLinks($main);
+  })
+  .decorate();
+
+export { app };

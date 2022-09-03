@@ -11,9 +11,11 @@
  */
 
 import {
-  createTag, fetchPlaceholders, getIcon, readBlockConfig,
+  createTag, fetchPlaceholders, getIcon,
 } from '../../scripts/scripts.js';
-
+import {
+  readBlockConfig,
+} from '../../scripts/helix-web-library.esm.js';
 /**
  * @param {number} [rating=5]
  */

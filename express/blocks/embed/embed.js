@@ -11,10 +11,7 @@
  */
 /* eslint-disable import/named, import/extensions */
 
-import {
-  loadScript,
-// eslint-disable-next-line import/no-unresolved
-} from '../../scripts/scripts.js';
+import { loadScript } from '../../scripts/helix-web-library.esm.js';
 
 // 'open.spotify.com' returns 'spotify'
 function getServer(url) {

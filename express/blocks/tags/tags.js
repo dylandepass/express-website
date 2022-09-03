@@ -11,7 +11,7 @@
  */
 
 // eslint-disable-next-line import/no-unresolved
-import { normalizeHeadings } from '../../scripts/scripts.js';
+import { normalizeHeadings } from '../../scripts/helix-web-library.esm.js';
 
 /**
  * Retrieves the content of a metadata tag.

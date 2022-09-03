@@ -11,14 +11,17 @@
  */
 
 import {
-  loadScript,
   getLocale,
   createTag,
   getLanguage,
   getHelixEnv,
-  sampleRUM,
-// eslint-disable-next-line import/no-unresolved
+  // eslint-disable-next-line import/no-unresolved
 } from './scripts.js';
+
+import {
+  loadScript,
+  sampleRUM,
+} from './helix-web-library.esm.js';
 
 function loadIMS() {
   window.adobeid = {

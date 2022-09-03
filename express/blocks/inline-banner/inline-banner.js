@@ -10,10 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import {
-  normalizeHeadings,
-// eslint-disable-next-line import/no-unresolved
-} from '../../scripts/scripts.js';
+import { normalizeHeadings } from '../../scripts/helix-web-library.esm.js';
 
 export default function decorate($block) {
   normalizeHeadings($block, ['h2', 'h3', 'h4']);

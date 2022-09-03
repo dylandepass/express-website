@@ -12,13 +12,16 @@
 /* eslint-disable import/named, import/extensions */
 
 import {
-  createOptimizedPicture,
   createTag,
-  readBlockConfig,
   getLanguage,
   getLocale,
-// eslint-disable-next-line import/no-unresolved
+  // eslint-disable-next-line import/no-unresolved
 } from '../../scripts/scripts.js';
+
+import {
+  readBlockConfig,
+  createOptimizedPicture,
+} from '../../scripts/helix-web-library.esm.js';
 
 async function fetchBlogIndex() {
   let prefix = `/${window.location.pathname.split('/')[1]}`;
