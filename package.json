@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/adobe/express-website#readme",
   "devDependencies": {
-    "@dylandepass/helix-web-library": "1.12.4",
+    "@dylandepass/helix-web-library": "1.13.0",
     "@adobe/eslint-config-helix": "1.1.3",
     "@babel/core": "7.13.10",
     "@babel/eslint-parser": "7.13.10",

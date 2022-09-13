@@ -31,7 +31,9 @@ async function decorateFragment($block) {
   console.log('fragment');
   app.decorateMain($main);
   const loadedBlocks = await loadBlocks($main);
-  await Promise.all(loadedBlocks);
+  if (loadedBlocks) {
+    await Promise.all(loadedBlocks);
+  }
   const $section = $block.closest('.section');
   $section.parentNode.replaceChild($main, $section);
 }

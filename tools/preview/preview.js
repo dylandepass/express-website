@@ -15,9 +15,12 @@ import {
   loadCSS,
   toClassName,
   getMetadata,
-  getExperimentConfig,
-  checkTesting,
 } from '../../express/scripts/scripts.js';
+
+import {
+  checkTesting,
+  getExperimentConfig,
+} from '../../express/scripts/helix-web-library.esm.js';
 
 /**
  * Create Badge if a Page is enlisted in an Adobe Target test
