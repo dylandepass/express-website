@@ -1461,6 +1461,7 @@ async function loadEager() {
   if (!window.hlx.lighthouse) await decorateTesting();
 
   const main = document.querySelector('main');
+  document.body.querySelector('header').remove();
   if (main) {
     await decorateMain(main);
     // decorateHeaderAndFooter();
