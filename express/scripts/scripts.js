@@ -1463,7 +1463,7 @@ async function loadEager() {
   const main = document.querySelector('main');
   if (main) {
     await decorateMain(main);
-    decorateHeaderAndFooter();
+    // decorateHeaderAndFooter();
     decoratePageStyle();
     displayEnv();
     displayOldLinkWarning();
@@ -1527,7 +1527,7 @@ async function decoratePage() {
 
   await loadEager();
   loadLazy();
-  loadGnav();
+  // loadGnav();
 }
 
 if (!window.hlx.init && !window.isTestEnv) {

@@ -38,7 +38,7 @@
   /* body */
   --body-background-color: var(--color-white);
   --body-alt-background-color: var(--color-gray-200);
-  --body-font-family: 'adobe-clean', 'Adobe Clean', 'Trebuchet MS', sans-serif;
+  --body-font-family: 'Trebuchet MS', sans-serif;
   --body-serif-font-family: 'adobe-clean-serif', 'Adobe Clean Serif', serif;
   --body-font-weight: normal;
   --body-color: var(--color-gray-800);
@@ -80,7 +80,8 @@ body {
   color: var(--body-color);
   margin: 0;
   padding: 0;
-  display: none;
+  display: block;
+  height: 100vh;
 }
 
 body.appear {
@@ -360,6 +361,8 @@ body.light-grey {
 
 main {
   text-align: center;
+  min-height: 500px;
+  margin-top: 29.88px;
 }
 
 main h1, h2, h3, h4, h5, h6 {
@@ -614,10 +617,6 @@ main .hero a.button:any-link {
 
 main .section-wrapper {
   padding-top: 60px;
-}
-
-main .section-wrapper:first-of-type {
-  padding-top: 120px;
 }
 
 main .section-wrapper:first-of-type {
