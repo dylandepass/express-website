@@ -81,6 +81,7 @@ body {
   margin: 0;
   padding: 0;
   display: none;
+  height: 100vh;
 }
 
 body.appear {
