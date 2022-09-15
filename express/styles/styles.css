@@ -361,6 +361,8 @@ body.light-grey {
 
 main {
   text-align: center;
+  min-height: 500px;
+  margin-top: 29.88px;
 }
 
 main h1, h2, h3, h4, h5, h6 {
@@ -615,10 +617,6 @@ main .hero a.button:any-link {
 
 main .section-wrapper {
   padding-top: 60px;
-}
-
-main .section-wrapper:first-of-type {
-  padding-top: 120px;
 }
 
 main .section-wrapper:first-of-type {

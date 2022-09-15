@@ -125,6 +125,7 @@ export default css`
   display: flex;
   justify-content: space-between;
   padding: 32px 27px 80px 30px;
+  min-height: 75px;
 }
 
 .ratings .slider-bottom .vertical-line {
@@ -145,6 +146,7 @@ export default css`
   background: transparent;
   border: none;
   white-space: nowrap;
+  min-height: 25px;
 }
 
 .ratings .slider-bottom .stars svg {
