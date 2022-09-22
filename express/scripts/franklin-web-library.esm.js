@@ -479,7 +479,7 @@ async function loadBlock(block, eager = false) {
                 await mod.default(block, blockName, document, eager);
               }
             } catch (err) {
-              // eslint-disable-next-line no-console
+            // eslint-disable-next-line no-console
               console.log(`failed to load module for ${blockName}`, err);
             }
             resolve();
@@ -487,7 +487,7 @@ async function loadBlock(block, eager = false) {
         });
         await Promise.all([cssLoaded, decorationComplete]);
       } catch (err) {
-        // eslint-disable-next-line no-console
+      // eslint-disable-next-line no-console
         console.log(`failed to load block ${blockName}`, err);
       }
     }
@@ -570,12 +570,14 @@ async function loadFooter(footer) {
  * load LCP block and/or wait for LCP in default content.
  * @preserve Exclude from terser
  */
-async function waitForLCP(LCP_BLOCKS, autoAppear) {
+async function waitForLCP(LCP_BLOCKS, autoAppear, loadLCPBlocks) {
   // eslint-disable-next-line no-use-before-define
   const lcpBlocks = LCP_BLOCKS;
   const block = document.querySelector('.block');
   const hasLCPBlock = (block && lcpBlocks.includes(block.getAttribute('data-block-name')));
-  if (hasLCPBlock) await loadBlock(block, true);
+  if (hasLCPBlock && loadLCPBlocks) {
+    await loadBlock(block, true);
+  }
 
   if (autoAppear) {
     document.querySelector('body').classList.add('appear');
@@ -709,7 +711,7 @@ function sampleRUM(checkpoint, data = {}, generation = '') {
 }
 
 /*
- * Copyright 2021 Adobe. All rights reserved.
+ * Copyright 2022 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy
  * of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -769,7 +771,7 @@ function registerPerformanceLogger() {
 }
 
 /*
- * Copyright 2021 Adobe. All rights reserved.
+ * Copyright 2022 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy
  * of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -862,7 +864,7 @@ function setLastExperimentVariant(experimentId, variant) {
 }
 
 /**
- * Gets the experiment name, if any for the page based on env, useragent, queyr params
+ * Gets the experiment name, if any for the page based on env, useragent, query params
  * @returns {string} experimentid
  */
 function getExperiment() {
@@ -1061,7 +1063,7 @@ async function decorateTesting() {
  */
 
 /**
- * Initializes helix
+ * Initializes franklin
  * @preserve Exclude from terser
  */
 function initHlx() {
@@ -1097,7 +1099,7 @@ function addPublishDependencies(url) {
 }
 
 /*
- * Copyright 2021 Adobe. All rights reserved.
+ * Copyright 2022 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy
  * of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -1115,6 +1117,7 @@ const defaultConfig = {
   enableBlockLoader: true,
   loadHeader: true,
   loadFooter: true,
+  experimentsEnabled: false,
 };
 
 /**
@@ -1131,9 +1134,10 @@ const defaultConfig = {
  * @property {boolean} enableBlockLoader
  * @property {boolean} loadHeader
  * @property {boolean} loadFooter
+ * @property {boolean} experimentsEnabled
  */
 
-class HelixApp {
+class Franklin {
   /** @param {AppConfig} config */
   constructor(config = defaultConfig) {
     this.config = config;
@@ -1156,7 +1160,7 @@ class HelixApp {
   }
 
   static init(config) {
-    return new HelixApp(config);
+    return new Franklin(config);
   }
 
   /**
@@ -1342,6 +1346,10 @@ class HelixApp {
       loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
     }
 
+    if (this.config.experimentsEnabled ?? defaultConfig.experimentsEnabled) {
+      if (!window.hlx.lighthouse) decorateTesting();
+    }
+
     addFavIcon(`${window.hlx.codeBasePath}${this.config.favIcon ?? defaultConfig.favIcon}`);
     if (this.loadLazyHook) {
       this.loadLazyHook(doc);
@@ -1420,8 +1428,12 @@ class HelixApp {
    * @preserve Exclude from terser
    */
   waitForLCP(lcpBlocks) {
-    return waitForLCP(lcpBlocks, this.config.autoAppear ?? defaultConfig.autoAppear);
+    return waitForLCP(
+      lcpBlocks,
+      this.config.autoAppear ?? defaultConfig.autoAppear,
+      this.config.enableBlockLoader ?? defaultConfig.enableBlockLoader,
+    );
   }
 }
 
-export { HelixApp, addFavIcon, addPublishDependencies, buildBlock, checkTesting, createOptimizedPicture, decorateBlock, decorateBlocks, decorateButtons, decorateIcons, decorateSections, decorateTemplateAndTheme, decorateTesting, fetchPlaceholders, getExperiment, getExperimentConfig, getMetadata, getOptimizedImagePath, initHlx, loadBlock, loadBlocks, loadCSS, loadFooter, loadHeader, loadScript, normalizeHeadings, readBlockConfig, registerPerformanceLogger, removeStylingFromImages, replaceInner, sampleRUM, stamp, toCamelCase, toClassName, updateSectionsStatus, waitForLCP };
+export { Franklin, addFavIcon, addPublishDependencies, buildBlock, checkTesting, createOptimizedPicture, decorateBlock, decorateBlocks, decorateButtons, decorateIcons, decorateSections, decorateTemplateAndTheme, decorateTesting, fetchPlaceholders, getExperiment, getExperimentConfig, getMetadata, getOptimizedImagePath, initHlx, loadBlock, loadBlocks, loadCSS, loadFooter, loadHeader, loadScript, normalizeHeadings, readBlockConfig, registerPerformanceLogger, removeStylingFromImages, replaceInner, sampleRUM, stamp, toCamelCase, toClassName, updateSectionsStatus, waitForLCP };

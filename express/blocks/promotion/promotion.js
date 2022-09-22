@@ -22,7 +22,7 @@ import {
   toClassName,
   createOptimizedPicture,
   normalizeHeadings,
-} from '../../scripts/helix-web-library.esm.js';
+} from '../../scripts/franklin-web-library.esm.js';
 
 const PROMOTION_FOLDER = 'express/promotions';
 

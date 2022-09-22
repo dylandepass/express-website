@@ -20,7 +20,7 @@ import {
 import {
   checkTesting,
   getExperimentConfig,
-} from '../../express/scripts/helix-web-library.esm.js';
+} from '../../express/scripts/franklin-web-library.esm.js';
 
 /**
  * Create Badge if a Page is enlisted in an Adobe Target test

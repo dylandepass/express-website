@@ -17,7 +17,7 @@ import {
   // eslint-disable-next-line import/no-unresolved
 } from '../../scripts/scripts.js';
 
-import { readBlockConfig } from '../../scripts/helix-web-library.esm.js';
+import { readBlockConfig } from '../../scripts/franklin-web-library.esm.js';
 
 function filterMigratedPages(filter) {
   const $results = document.getElementById('page-filter-results');

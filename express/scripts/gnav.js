@@ -21,7 +21,7 @@ import {
 import {
   loadScript,
   sampleRUM,
-} from './helix-web-library.esm.js';
+} from './franklin-web-library.esm.js';
 
 function loadIMS() {
   window.adobeid = {

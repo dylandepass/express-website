@@ -19,7 +19,7 @@ import {
   // eslint-disable-next-line import/no-unresolved
 } from '../../scripts/scripts.js';
 
-import { toClassName } from '../../scripts/helix-web-library.esm.js';
+import { toClassName } from '../../scripts/franklin-web-library.esm.js';
 
 import {
   isVideoLink,

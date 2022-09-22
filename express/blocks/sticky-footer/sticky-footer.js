@@ -15,7 +15,7 @@ import {
 } from '../../scripts/scripts.js';
 import {
   readBlockConfig,
-} from '../../scripts/helix-web-library.esm.js';
+} from '../../scripts/franklin-web-library.esm.js';
 /**
  * @param {number} [rating=5]
  */

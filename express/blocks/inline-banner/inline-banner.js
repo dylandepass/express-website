@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { normalizeHeadings } from '../../scripts/helix-web-library.esm.js';
+import { normalizeHeadings } from '../../scripts/franklin-web-library.esm.js';
 
 export default function decorate($block) {
   normalizeHeadings($block, ['h2', 'h3', 'h4']);

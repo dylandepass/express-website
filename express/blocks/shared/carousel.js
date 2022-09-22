@@ -14,7 +14,7 @@ import {
   createTag,
   // eslint-disable-next-line import/no-unresolved
 } from '../../scripts/scripts.js';
-import { loadCSS } from '../../scripts/helix-web-library.esm.js';
+import { loadCSS } from '../../scripts/franklin-web-library.esm.js';
 
 // Wait for all media to load
 function waitForMediaToLoad($parent) {

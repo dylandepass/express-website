@@ -11,7 +11,7 @@
  */
 
 // eslint-disable-next-line import/no-unresolved
-import { toClassName } from '../../scripts/helix-web-library.esm.js';
+import { toClassName } from '../../scripts/franklin-web-library.esm.js';
 
 export default function decorate($block) {
   const $rows = Array.from($block.children);

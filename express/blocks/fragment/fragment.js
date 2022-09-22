@@ -17,7 +17,7 @@ import {
   // eslint-disable-next-line import/no-unresolved
 } from '../../scripts/scripts.js';
 
-import { loadBlocks } from '../../scripts/helix-web-library.esm.js';
+import { loadBlocks } from '../../scripts/franklin-web-library.esm.js';
 
 async function decorateFragment($block) {
   const ref = $block.textContent;

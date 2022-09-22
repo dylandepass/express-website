@@ -21,7 +21,7 @@ import {
   // eslint-disable-next-line import/no-unresolved
 } from './scripts.js';
 
-import { loadScript } from './helix-web-library.esm.js';
+import { loadScript } from './franklin-web-library.esm.js';
 
 // eslint-disable-next-line import/no-unresolved
 import Context from './context.js';

@@ -21,7 +21,7 @@ import {
 import {
   readBlockConfig,
   createOptimizedPicture,
-} from '../../scripts/helix-web-library.esm.js';
+} from '../../scripts/franklin-web-library.esm.js';
 
 async function fetchBlogIndex() {
   let prefix = `/${window.location.pathname.split('/')[1]}`;

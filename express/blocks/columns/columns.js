@@ -30,7 +30,7 @@ import {
   createFloatingButton,
 } from '../floating-button/floating-button.js';
 
-import { toClassName } from '../../scripts/helix-web-library.esm.js';
+import { toClassName } from '../../scripts/franklin-web-library.esm.js';
 
 function transformToVideoColumn($cell, $a) {
   const $parent = $cell.parentElement;

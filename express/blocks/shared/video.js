@@ -17,7 +17,7 @@ import {
 import {
   loadBlock,
   toClassName,
-} from '../../scripts/helix-web-library.esm.js';
+} from '../../scripts/franklin-web-library.esm.js';
 
 const docTitle = document.title;
 

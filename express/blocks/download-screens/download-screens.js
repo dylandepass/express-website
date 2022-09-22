@@ -11,7 +11,7 @@
  */
 
 import { createTag } from '../../scripts/scripts.js';
-import { readBlockConfig } from '../../scripts/helix-web-library.esm.js';
+import { readBlockConfig } from '../../scripts/franklin-web-library.esm.js';
 
 const CARD_WIDTH = 157;
 const CARD_HEIGHT = 313;
