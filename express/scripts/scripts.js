@@ -846,13 +846,13 @@ function loadMartech() {
 }
 
 function loadGnav() {
-  // const usp = new URLSearchParams(window.location.search);
-  // const gnav = usp.get('gnav') || getMetadata('gnav');
+  const usp = new URLSearchParams(window.location.search);
+  const gnav = usp.get('gnav') || getMetadata('gnav');
 
-  // const gnavUrl = '/express/scripts/gnav.js';
-  // if (!(gnav === 'off' || document.querySelector(`head script[src="${gnavUrl}"]`))) {
-  //   loadScript(gnavUrl, null, 'module');
-  // }
+  const gnavUrl = '/express/scripts/gnav.js';
+  if (!(gnav === 'off' || document.querySelector(`head script[src="${gnavUrl}"]`))) {
+    loadScript(gnavUrl, null, 'module');
+  }
 }
 
 function decoratePageStyle() {
