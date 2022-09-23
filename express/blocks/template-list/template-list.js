@@ -25,7 +25,7 @@ import { Masonry } from '../shared/masonry.js';
 
 import { buildCarousel } from '../shared/carousel.js';
 
-import { toClassName } from '../../scripts/helix-web-library.esm.js';
+import { toClassName } from '../../scripts/franklin-web-library.esm.js';
 
 const cache = {
   templates: [],
@@ -392,10 +392,12 @@ export async function decorateTemplateList($block) {
     breakpoints = [{ media: '(min-width: 400px)', width: '2000' }, { width: '750' }];
   }
 
-  $block.querySelectorAll(':scope picture > img').forEach(($img) => {
-    const { src, alt } = $img;
-    $img.parentNode.replaceWith(createOptimizedPicture(src, alt, true, breakpoints));
-  });
+  if (!window.STORYBOOK_ENV) {
+    $block.querySelectorAll(':scope picture > img').forEach(($img) => {
+      const { src, alt } = $img;
+      $img.parentNode.replaceWith(createOptimizedPicture(src, alt, true, breakpoints));
+    });
+  }
 
   // find the edit link and turn the template DIV into the A
   // A
