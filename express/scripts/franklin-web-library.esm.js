@@ -136,6 +136,7 @@ function readBlockConfig(block) {
  * @preserve Exclude from terser
  */
 function decorateSections(main) {
+  console.log('decorate sections', main.cloneNode());
   main.querySelectorAll(':scope > div').forEach((section) => {
     const wrappers = [];
     let defaultContent = false;
@@ -1255,6 +1256,7 @@ class Franklin {
    * Decorate the page
    */
   async decorate() {
+    console.log('decorate', document);
     await this.loadEager(document);
     await this.loadLazy(document);
     this.loadDelayed(document);
@@ -1276,6 +1278,7 @@ class Franklin {
    * @param {Element} main The main element
    */
   decorateMain(main) {
+    console.log('decorating main');
     removeStylingFromImages(main);
     this.decorateButtons(main);
     this.decorateIcons(main);
@@ -1436,4 +1439,6 @@ class Franklin {
   }
 }
 
-export { Franklin, addFavIcon, addPublishDependencies, buildBlock, checkTesting, createOptimizedPicture, decorateBlock, decorateBlocks, decorateButtons, decorateIcons, decorateSections, decorateTemplateAndTheme, decorateTesting, fetchPlaceholders, getExperiment, getExperimentConfig, getMetadata, getOptimizedImagePath, initHlx, loadBlock, loadBlocks, loadCSS, loadFooter, loadHeader, loadScript, normalizeHeadings, readBlockConfig, registerPerformanceLogger, removeStylingFromImages, replaceInner, sampleRUM, stamp, toCamelCase, toClassName, updateSectionsStatus, waitForLCP };
+export {
+  Franklin, addFavIcon, addPublishDependencies, buildBlock, checkTesting, createOptimizedPicture, decorateBlock, decorateBlocks, decorateButtons, decorateIcons, decorateSections, decorateTemplateAndTheme, decorateTesting, fetchPlaceholders, getExperiment, getExperimentConfig, getMetadata, getOptimizedImagePath, initHlx, loadBlock, loadBlocks, loadCSS, loadFooter, loadHeader, loadScript, normalizeHeadings, readBlockConfig, registerPerformanceLogger, removeStylingFromImages, replaceInner, sampleRUM, stamp, toCamelCase, toClassName, updateSectionsStatus, waitForLCP,
+};

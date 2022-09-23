@@ -12,7 +12,7 @@
 /* eslint-disable no-console */
 
 import {
-  HelixApp,
+  Franklin,
   buildBlock,
   stamp,
   readBlockConfig,
@@ -22,7 +22,7 @@ import {
   checkTesting,
   decorateTesting,
   loadBlock,
-} from './helix-web-library.esm.js';
+} from './franklin-web-library.esm.js';
 
 /**
  * log RUM if part of the sample.
@@ -792,7 +792,7 @@ export async function fetchPlaceholders() {
     try {
       const locale = getLocale(window.location);
       const urlPrefix = locale === 'us' ? '' : `/${locale}`;
-      const resp = await fetch(`${urlPrefix}/express/placeholders.json`);
+      const resp = await fetch(`https://main--helix-playground--dylandepass.hlx.page/${urlPrefix}/express/placeholders.json`);
       const json = await resp.json();
       window.placeholders = {};
       json.data.forEach((placeholder) => {
@@ -846,13 +846,13 @@ function loadMartech() {
 }
 
 function loadGnav() {
-  const usp = new URLSearchParams(window.location.search);
-  const gnav = usp.get('gnav') || getMetadata('gnav');
+  // const usp = new URLSearchParams(window.location.search);
+  // const gnav = usp.get('gnav') || getMetadata('gnav');
 
-  const gnavUrl = '/express/scripts/gnav.js';
-  if (!(gnav === 'off' || document.querySelector(`head script[src="${gnavUrl}"]`))) {
-    loadScript(gnavUrl, null, 'module');
-  }
+  // const gnavUrl = '/express/scripts/gnav.js';
+  // if (!(gnav === 'off' || document.querySelector(`head script[src="${gnavUrl}"]`))) {
+  //   loadScript(gnavUrl, null, 'module');
+  // }
 }
 
 function decoratePageStyle() {
@@ -923,7 +923,7 @@ export function addSearchQueryToHref(href) {
 }
 
 export function decorateButtons(block = document) {
-  const noButtonBlocks = ['template-list', 'icon-list'];
+  const noButtonBlocks = ['template-list', 'icon-list', 'image-list'];
   block.querySelectorAll(':scope a').forEach(($a) => {
     const originalHref = $a.href;
     if ($a.children.length > 0) {
@@ -1522,7 +1522,7 @@ export function trackBranchParameters($links) {
   }
 }
 
-const app = HelixApp.init({
+export const app = Franklin.init({
   rumEnabled: true,
   autoAppear: false,
   loadHeader: false,
@@ -1580,7 +1580,9 @@ app.withDecorateSections(($main) => {
 
     const main = document.querySelector('main');
     if (main) {
-      decorateHeaderAndFooter();
+      if (app.config.loadHeader || app.config.loadFooter) {
+        decorateHeaderAndFooter();
+      }
       decoratePageStyle();
       decorateLegalCopy(main);
       addJapaneseSectionHeaderSizing();
@@ -1646,14 +1648,14 @@ app.withDecorateSections(($main) => {
     // post LCP actions go here
     sampleRUM('lcp');
 
-    // TODO: Make this configurable in helix-web-library
+    // TODO: Make this configurable in franklin-web-library
     loadCSS('/express/styles/lazy-styles.css');
     scrollToHash();
     resolveFragments();
     addPromotion();
     removeMetadata();
 
-    // TODO: Make this configurable in helix-web-library
+    // TODO: Make this configurable in franklin-web-library
     addFavIcon('/express/icons/cc-express.svg');
     if (!window.hlx.lighthouse) loadMartech();
 
@@ -1661,6 +1663,7 @@ app.withDecorateSections(($main) => {
     sampleRUM.observe(main.querySelectorAll('div[data-block-name]'));
   })
   .withDecorateBlock((block) => {
+    console.log('decorating block', block);
     const blockName = block.classList[0];
     if (blockName) {
       let shortBlockName = blockName;
@@ -1686,15 +1689,14 @@ app.withDecorateSections(($main) => {
     }
   })
   .withDecorateMain(async ($main) => {
-    console.log('decorating main');
     splitSections($main);
+    console.log('decorating marqee');
     decorateMarqueeColumns($main);
     await fixIcons($main);
-    decoratePictures($main);
+    if (!window.STORYBOOK_ENV) {
+      decoratePictures($main);
+    }
     decorateLinkedPictures($main);
     decorateSocialIcons($main);
     makeRelativeLinks($main);
-  })
-  .decorate();
-
-export { app };
+  });

@@ -480,6 +480,11 @@ main a:any-link {
   font-weight: 600;
 }
 
+img {
+  width: auto;
+  height: auto;
+}
+
 main img {
   max-width: 100%;
 }
