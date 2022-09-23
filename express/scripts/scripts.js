@@ -1525,8 +1525,8 @@ export function trackBranchParameters($links) {
 export const app = Franklin.init({
   rumEnabled: true,
   autoAppear: false,
-  loadHeader: true,
-  loadFooter: true,
+  loadHeader: false,
+  loadFooter: false,
   rumGeneration: 'ccx-gen-3',
   lcpBlocks: ['columns', 'hero-animation', 'hero-3d'],
 });
@@ -1580,9 +1580,10 @@ app.withDecorateSections(($main) => {
 
     const main = document.querySelector('main');
     if (main) {
-      if (app.config.loadHeader || app.config.loadFooter) {
+      if (!window.STORYBOOK_ENV) {
         decorateHeaderAndFooter();
       }
+
       decoratePageStyle();
       decorateLegalCopy(main);
       addJapaneseSectionHeaderSizing();
