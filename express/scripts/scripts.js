@@ -1525,8 +1525,8 @@ export function trackBranchParameters($links) {
 export const app = Franklin.init({
   rumEnabled: true,
   autoAppear: false,
-  loadHeader: false,
-  loadFooter: false,
+  loadHeader: true,
+  loadFooter: true,
   rumGeneration: 'ccx-gen-3',
   lcpBlocks: ['columns', 'hero-animation', 'hero-3d'],
 });
