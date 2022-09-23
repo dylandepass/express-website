@@ -1699,4 +1699,5 @@ app.withDecorateSections(($main) => {
     decorateLinkedPictures($main);
     decorateSocialIcons($main);
     makeRelativeLinks($main);
-  });
+  })
+  .decorate();
