@@ -297,6 +297,7 @@ function decorateVideoPlayerMenu($block, payload) {
 }
 
 export default function decorate($block) {
+  console.log('b', $block);
   const payload = {
     sessionIndex: 0,
     videoIndex: 0,

@@ -18,6 +18,7 @@ import {
 } from '../../scripts/scripts.js';
 
 export default function decorate($block) {
+  console.log('here');
   const $cards = Array.from($block.querySelectorAll(':scope>div'));
   const chevron = getIcon('chevron');
   $cards.forEach(($card) => {

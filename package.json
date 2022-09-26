@@ -6,7 +6,9 @@
   "scripts": {
     "test": "karma start karma.config.js",
     "integration-test": "mocha integration/*.test.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
@@ -19,10 +21,20 @@
   },
   "homepage": "https://github.com/adobe/express-website#readme",
   "devDependencies": {
-    "@dylandepass/helix-web-library": "1.13.0",
+    "@dylandepass/franklin-storybook-addon": "0.0.26",
     "@adobe/eslint-config-helix": "1.1.3",
     "@babel/core": "7.13.10",
     "@babel/eslint-parser": "7.13.10",
+    "@dylandepass/franklin-web-library": "1.13.3",
+    "@storybook/addon-actions": "^6.5.12",
+    "@storybook/addon-essentials": "^6.5.12",
+    "@storybook/addon-interactions": "^6.5.12",
+    "@storybook/addon-links": "^6.5.12",
+    "@storybook/builder-webpack4": "^6.5.12",
+    "@storybook/html": "^6.5.12",
+    "@storybook/manager-webpack4": "^6.5.12",
+    "@storybook/testing-library": "^0.0.13",
+    "babel-loader": "^8.2.5",
     "chai": "4.3.4",
     "eslint": "7.15.0",
     "eslint-plugin-header": "3.1.0",

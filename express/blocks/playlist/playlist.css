@@ -1,3 +1,8 @@
+/* Prevent collapsing margins in storybook */
+main .section.playlist-container:first-of-type {
+    padding: 1px 8px;
+}
+
 main .playlist-container {
     background-color: var(--body-alt-background-color);
     padding: 40px 8px;

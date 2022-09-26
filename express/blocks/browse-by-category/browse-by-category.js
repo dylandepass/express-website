@@ -59,15 +59,15 @@ export default async function decorate($block) {
 
   const payload = {
     heading: $headingDiv.querySelector('h4').textContent,
-    viewAllLink: $headingDiv.querySelector('a.button').href,
+    viewAllLink: $headingDiv.querySelector('a').href,
     categories: [],
   };
 
   $rows.forEach(($row) => {
     payload.categories.push({
       $image: $row.querySelector('picture'),
-      text: $row.querySelector('a.button').textContent,
-      link: $row.querySelector('a.button').href,
+      text: $row.querySelector('a').textContent,
+      link: $row.querySelector('a').href,
     });
   });
 

@@ -1,3 +1,8 @@
+/* Prevent collapsing margins in storybook */
+main .section.faq-container:first-of-type {
+    padding: 80px 0px;
+}
+
 main .faq-container {
     background-color: var(--color-gray-200);
     padding: 80px 0;

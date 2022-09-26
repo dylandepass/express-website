@@ -61,7 +61,7 @@ export default function decorate($block, name, doc) {
   if (includeSchema) {
     const $schema = createTag('script', { type: 'application/ld+json' });
     $schema.innerHTML = JSON.stringify(schema);
-    const $head = doc.head;
+    const $head = document.head;
     $head.append($schema);
   }
 }

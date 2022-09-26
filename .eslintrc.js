@@ -23,6 +23,7 @@ module.exports = {
     'import/extensions': ['error', {
       js: 'always',
     }],
+    'import/no-extraneous-dependencies': 'off',
   },
   parser: '@babel/eslint-parser',
   parserOptions: {
