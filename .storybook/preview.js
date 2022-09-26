@@ -9,7 +9,5 @@ export const parameters = {
       date: /Date$/,
     },
   },
-  viewport: {
-    viewports: INITIAL_VIEWPORTS,
-  },
+  chromatic: { viewports: [320, 900, 1200] },
 }
