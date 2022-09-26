@@ -1,3 +1,5 @@
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+
 export const parameters = {
   host: 'https://main--helix-playground--dylandepass.hlx.page',
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -6,5 +8,8 @@ export const parameters = {
       color: /(background|color)$/i,
       date: /Date$/,
     },
+  },
+  viewport: {
+    viewports: INITIAL_VIEWPORTS,
   },
 }

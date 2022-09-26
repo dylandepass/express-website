@@ -8,23 +8,26 @@
     "integration-test": "mocha integration/*.test.js",
     "lint": "eslint .",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "chromatic": "npx chromatic --project-token=aeea6d6bbf8e"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/adobe/express-website.git"
   },
-  "author": "Adobe",
+  "author": {
+    "name": "Adobe"
+  },
   "license": "Apache License 2.0",
   "bugs": {
     "url": "https://github.com/adobe/express-website/issues"
   },
   "homepage": "https://github.com/adobe/express-website#readme",
   "devDependencies": {
-    "@dylandepass/franklin-storybook-addon": "0.0.26",
     "@adobe/eslint-config-helix": "1.1.3",
     "@babel/core": "7.13.10",
     "@babel/eslint-parser": "7.13.10",
+    "@dylandepass/franklin-storybook-addon": "0.0.26",
     "@dylandepass/franklin-web-library": "1.13.3",
     "@storybook/addon-actions": "^6.5.12",
     "@storybook/addon-essentials": "^6.5.12",
@@ -36,6 +39,7 @@
     "@storybook/testing-library": "^0.0.13",
     "babel-loader": "^8.2.5",
     "chai": "4.3.4",
+    "chromatic": "^6.10.0",
     "eslint": "7.15.0",
     "eslint-plugin-header": "3.1.0",
     "eslint-plugin-import": "2.22.1",
@@ -49,5 +53,7 @@
     "mocha": "9.1.3",
     "puppeteer": "12.0.1",
     "shelljs": "0.8.4"
-  }
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "@adobe/express-website@1.0.0"
 }
