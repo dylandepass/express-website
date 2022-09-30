@@ -1,0 +1,182 @@
+/**
+     * Decorates a block.
+     * @param {Element} block The block element
+     * @preserve Exclude from terser
+     */
+
+/**
+     * Decorates all Icons.
+     * @param {Element} block The block element
+     * @preserve Exclude from terser
+     */
+
+/**
+     * Decorates all blocks in a container element.
+     * @param {Element} main The container element
+     * @preserve Exclude from terser
+     */
+
+/**
+     * Decorates all sections in a container element.
+     * @param {Element} main The container element
+     * @preserve Exclude from terser
+     */
+
+/**
+     * Decorates paragraphs containing a single link as buttons.
+     * @param {Element} block The block element
+     * @preserve Exclude from terser
+     */
+
+/**
+     * load LCP block and/or wait for LCP in default content.
+     * @preserve Exclude from terser
+     */
+
+/**
+     * log RUM if part of the sample.
+     * @param {string} checkpoint identifies the checkpoint in funnel
+     * @param {Object} data additional data for RUM sample
+     * @preserve Exclude from terser
+     */
+
+/**
+ * Adds one or more URLs to the dependencies for publishing.
+ * @param {string|string[]} url The URL(s) to add as dependencies
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Adds the favicon.
+ * @param {string} href The favicon URL
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Builds a block DOM Element from a two dimensional array
+ * @param {string} blockName name of the block
+ * @param {any} content two dimensional array or string or object of content
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Decorates a block.
+ * @param {Element} block The block element
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Decorates all blocks in a container element.
+ * @param {Element} main The container element
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Decorates all sections in a container element.
+ * @param {Element} main The container element
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Extracts the config from a block.
+ * @param {Element} block The block element
+ * @returns {object} The block config
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Given a set of breakpoints, returns the appropriate image URL for the most optimized version.
+ * @param {string} src The image URL
+ * @param {Array} breakpoints breakpoints and corresponding params (eg. width)
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Initializes franklin
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Loads JS and CSS for a block.
+ * @param {Element} block The block element
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Loads JS and CSS for all blocks in a container element.
+ * @param {Element} main The container element
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Loads a CSS file.
+ * @param {string} href The path to the CSS file
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Loads the footer block.
+ * @param {Element} footer The footer element
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Loads the header block.
+ * @param {Element} header The header element
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Normalizes all headings within a container element.
+ * @param {Element} elem The container element
+ * @param {string[]} allowedHeadings The list of allowed headings (h1 ... h6)
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Removes formatting from images.
+ * @param {Element} main The container element
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Retrieves the content of metadata tags.
+ * @param {string} name The metadata name (or property)
+ * @returns {string} The metadata value(s)
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Returns a picture element with webp and fallbacks
+ * @param {string} src The image URL
+ * @param {boolean} eager load image eager
+ * @param {Array} breakpoints breakpoints and corresponding params (eg. width)
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Sanitizes a name for use as class name.
+ * @param {string} name The unsanitized name
+ * @returns {string} The class name
+ * @preserve Exclude from terser
+ */
+
+/**
+ * Updates all section status in a container element.
+ * @param {Element} main The container element
+ * @preserve Exclude from terser
+ */
+
+/**
+ * load LCP block and/or wait for LCP in default content.
+ * @preserve Exclude from terser
+ */
+
+/**
+ * loads a script by adding a script tag to the head.
+ * @param {string} url URL of the js file
+ * @param {Function} callback callback on load
+ * @param {string} type type attribute of script tag
+ * @returns {Element} script element
+ * @preserve Exclude from terser
+ */
